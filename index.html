@@ -51,6 +51,13 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
+        /* 🔑 NAV LINKS CENTERING */
+        .nav-links-container {
+            display: flex;
+            justify-content: center; 
+            flex-grow: 1; 
+        }
+
         /* 📱 MOBILE MENU STYLES 📱 */
         #mobile-menu {
             position: fixed;
@@ -61,8 +68,8 @@
             background-color: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(8px);
             z-index: 60;
-            transform: translateX(100%); /* Start off-screen (right) */
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Springy animation */
+            transform: translateX(100%); 
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
             padding: 4rem 2rem;
             overflow-y: auto;
         }
@@ -73,7 +80,7 @@
 
         .mobile-nav-link {
             display: block;
-            font-size: 1.75rem; /* Large text for mobile */
+            font-size: 1.75rem; 
             font-weight: 700;
             color: var(--text-white);
             padding: 1rem 0;
@@ -82,9 +89,8 @@
         }
         .mobile-nav-link:hover {
             color: var(--primary-orange-light);
-            transform: translateX(10px);
+            transform: none; /* No shake/lift on mobile menu hover */
         }
-        /* Fix for mobile link in last section to match CTA style */
         .mobile-nav-link.cta-mobile {
             color: var(--dark-background);
             border-bottom: none;
@@ -93,18 +99,15 @@
 
         /* HERO HEADLINE - EXPRESSIVE TYPOGRAPHY */
         .hero-headline {
-            /* *** MODIFIED FOR WHITE TEXT *** */
-            color: var(--text-white); /* Set main text color to white */
-            background: none; /* Remove previous background gradient */
+            color: var(--text-white); 
+            background: none; 
             -webkit-background-clip: unset;
             -webkit-text-fill-color: unset;
-            animation: none; /* Remove textShine animation from main headline */
-            /* *** END MODIFIED *** */
+            animation: none; 
             
             font-weight: 900;
             text-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
-            /* Reinforced Font Size for Screenshot Match */
-            font-size: 3rem; /* Default mobile size */
+            font-size: 3rem; 
         }
         @keyframes textShine { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
@@ -115,8 +118,8 @@
         /* ROTATING AUDIENCE TEXT STYLES (Glitch) */
         #rotating-audience {
             display: inline-block;
-            min-width: 300px; /* Ensure space for the longest word */
-            height: 1.2em; /* Ensure stable height */
+            min-width: 300px; 
+            height: 1.2em; 
         }
         
         /* Glitch Keyframes */
@@ -146,7 +149,122 @@
             transform-style: preserve-3d; perspective: 1000px;
         }
         .interactive-card:hover { border-color: var(--primary-orange); box-shadow: 0 10px 40px rgba(255, 140, 0, 0.2); z-index: 10; }
-        .hover-lift:hover { transform: translateY(-5px); }
+        
+        /* .hover-lift:hover { transform: translateY(-5px); } <-- REMOVED CLASS IN HTML */
+        
+        /* 🔑 TESTIMONIALS AUTO-SWITCH STYLES (Updated with Slide/Fade) 🔑 */
+        @keyframes slideInRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutLeft { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-50px); opacity: 0; } }
+        @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(50px); opacity: 0; } }
+
+        #testimonials-scroller-container {
+            overflow: hidden;
+            position: relative;
+            height: 350px; /* Fixed height to prevent layout shift on desktop */
+            margin: 0 auto;
+            max-width: 1000px;
+        }
+        .testimonial-page {
+            display: flex;
+            gap: 2rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.1s, visibility 0.1s; /* Quick transition for state change, animation handles movement */
+            pointer-events: none;
+        }
+        .testimonial-page.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            /* Disable transition for active elements to allow animation to take over */
+            transition: none; 
+        }
+        /* Animation classes */
+        .testimonial-page.slide-in-right .testimonial-card-wrapper {
+            animation: slideInRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        .testimonial-page.slide-out-left .testimonial-card-wrapper {
+            animation: slideOutLeft 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+        }
+        .testimonial-page.slide-in-left .testimonial-card-wrapper {
+            animation: slideInLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        .testimonial-page.slide-out-right .testimonial-card-wrapper {
+            animation: slideOutRight 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+        }
+
+        /* Staggered timing for a better effect */
+        .testimonial-page.slide-in-right .testimonial-card-wrapper:nth-child(2),
+        .testimonial-page.slide-out-left .testimonial-card-wrapper:nth-child(2),
+        .testimonial-page.slide-in-left .testimonial-card-wrapper:nth-child(2),
+        .testimonial-page.slide-out-right .testimonial-card-wrapper:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .testimonial-card-wrapper {
+            flex: 1 1 50%; 
+        }
+        
+        /* Carousel Navigation Buttons */
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            background: rgba(255, 140, 0, 0.6);
+            color: var(--dark-background);
+            border: none;
+            padding: 1rem 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        .carousel-nav-btn:hover {
+            background: var(--primary-orange);
+            transform: translateY(-50%) scale(1.05);
+        }
+        /* FIX: Adjusted positions to prevent hiding at screen edges */
+        /* Desktop */
+        #prev-testimonial { left: 10px; } 
+        #next-testimonial { right: 10px; }
+
+        @media (max-width: 767px) {
+            #testimonials-scroller-container {
+                /* Adjusted height for a single stacked card */
+                height: 300px; 
+                padding: 0 20px;
+            }
+            .testimonial-page {
+                /* Display cards horizontally in mobile, but overflow hidden will hide all but the first. 
+                    The new HTML structure below will ensure one is shown per "page".
+                */
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            .testimonial-card-wrapper {
+                /* FORCE 100% width, effectively only one visible card per page in the current setup. */
+                flex: 1 1 100%;
+                max-width: 400px;
+            }
+            .carousel-nav-btn {
+                padding: 0.75rem 0.5rem;
+                top: auto;
+                bottom: -20px; /* Move buttons below the cards entirely */
+                transform: none;
+            }
+            /* FIX: Ensure buttons are visible on mobile, positioned relative to the center bottom */
+            #prev-testimonial { left: 25%; }
+            #next-testimonial { right: 25%; }
+        }
         
         /* SCROLL REVEAL (for general elements) */
         .scroll-reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1); }
@@ -158,11 +276,7 @@
         @keyframes spin-icon { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .spin-icon { animation: spin-icon 10s linear infinite; }
         
-        /* --- PRICING STYLES (Kept as requested) --- */
-        .pricing-toggle-container { background-color: #1a1a1a; padding: 4px; border-radius: 12px; border: 1px solid rgba(255, 140, 0, 0.3); box-shadow: 0 0 10px rgba(255, 140, 0, 0.1); }
-        .pricing-toggle-btn { position: relative; z-index: 2; padding: 10px 24px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
-        .pricing-toggle-btn.active { background-color: var(--primary-orange); color: var(--dark-background) !important; box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4); }
-        .pricing-toggle-btn:not(.active) { color: #ccc; background-color: transparent; }
+        /* --- PRICING STYLES (Fixed, no toggle) --- */
         .pricing-card { background-color: var(--card-bg); border: 1px solid rgba(255, 140, 0, 0.1); transition: all 0.4s ease; position: relative; overflow: hidden; box-shadow: none !important; }
         .pricing-card.active { border-color: var(--primary-orange); transform: translateY(-8px) scale(1.02); box-shadow: 0 15px 40px rgba(255, 140, 0, 0.2); z-index: 1; }
         .pricing-feature { padding: 12px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.05); transition: background-color 0.3s; }
@@ -183,62 +297,182 @@
         /* FAQ Animation Style */
         .faq-header.active .arrow-icon { transform: rotate(225deg); } 
         
-        /* --- HOW IT WORKS: 3D FLIP CARD STYLES (Background fixed to pure black) --- */
+        /* --- HOW IT WORKS: TIMELINE STYLES (REVISED FOR MOBILE) --- */
         #holistic-focus {
             overflow: hidden;
-            background-color: var(--dark-background); /* Explicitly set to pure black */
-        }
-        #scatter-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            perspective: 1500px; /* Perspective for the 3D effect */
-            max-width: 1000px;
-            margin: 0 auto;
-            gap: 20px;
+            background-color: var(--dark-background);
         }
 
-        .scatter-card {
-            width: calc(33.33% - 15px); 
-            padding: 30px;
-            border-radius: 12px;
-            transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s;
+        #timeline-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative; /* Crucial for absolute children positioning */
+        }
+
+        /* The vertical line in the middle/side */
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            left: 50%; /* Default desktop center */
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-orange), var(--accent-purple), var(--accent-blue));
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        /* Dot and Icon Wrapper */
+        .timeline-dot-wrapper {
+            position: absolute;
+            top: 0;
+            left: 50%; /* Default desktop center */
+            width: 40px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 20;
+            transform: translateX(-50%); /* Center wrapper on desktop */
+        }
+
+        /* The circular dot */
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            position: sticky; 
+            top: 150px; /* Adjusted sticky position to clear nav bar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid var(--dark-background);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+            transform: translateY(-50%);
+            transition: transform 0.5s ease-out, box-shadow 0.5s ease;
+        }
+
+        .timeline-dot i {
+            color: var(--dark-background);
+            font-size: 1rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 6rem;
+            /* Flex properties applied only on desktop below */
+        }
+
+        /* Styles for the content card */
+        .timeline-card-content {
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            background-color: var(--card-bg); 
+            border: 1px solid rgba(255, 140, 0, 0.1);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             transform-style: preserve-3d;
-            
-            /* Initial state: Rotated away and slightly obscured/off-center */
-            transform: rotateY(90deg) scale(0.8);
-            opacity: 0;
+            perspective: 1000px;
+        }
+        .timeline-card-content:hover {
+            border-color: var(--primary-orange); 
+            box-shadow: 0 10px 40px rgba(255, 140, 0, 0.2); 
             z-index: 10;
         }
         
-        /* Active state: Rotated fully into view */
-        .scatter-card.active {
-            transform: rotateY(0deg) scale(1);
-            opacity: 1;
+
+        /* Scroll Reveal for Timeline Items */
+        .timeline-item .timeline-card-content {
+            opacity: 0; 
+            transform: translateX(0); /* Default mobile: no X translation yet */
+            transition: opacity 1s, transform 1s;
         }
-        
-        /* Apply staggered delay based on HTML ordering to match previous visual flow */
-        #card-1 { transition-delay: 0.1s; }
-        #card-2 { transition-delay: 0.3s; }
-        #card-3 { transition-delay: 0.5s; }
-        
-        /* Mobile adjustment to stack cards vertically for the 3D flip */
+
+        /* Mobile View (Default/Max Width 767px) */
         @media (max-width: 767px) {
-            #scatter-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 30px;
+            #timeline-container {
+                padding-left: 1.5rem; /* Space for the line and dots */
             }
-            .scatter-card {
-                width: 90%;
-                max-width: 350px;
-                /* Apply initial state directly */
-                transform: rotateX(90deg) scale(0.8);
+            .timeline-line {
+                left: 1.25rem; /* Move line to the far left side */
+                transform: translateX(-50%);
             }
-            .scatter-card.active {
-                transform: rotateX(0deg) scale(1);
+            .timeline-dot-wrapper {
+                left: 1.25rem; /* Align dot wrapper to the line */
+                transform: translateX(-50%);
+            }
+            .timeline-item {
+                padding-left: 1.5rem; /* Push content away from line */
+            }
+            .timeline-card-content {
+                width: 95%; /* Ensure card fits within screen width */
+                max-width: none;
+                transform: translateX(20px); /* Mobile initial slide-in from left */
+            }
+            .timeline-item.active .timeline-card-content { 
+                transform: translateX(0); 
+            }
+            /* Override for desktop positioning class that might interfere */
+            .timeline-item > div:first-child, .timeline-item > div:last-child {
+                width: 100%;
+                padding: 0;
+                text-align: left !important;
             }
         }
+        
+        /* Desktop View (Min Width 768px) */
+        @media (min-width: 768px) {
+            #timeline-container {
+                padding-left: 0; 
+            }
+            .timeline-line {
+                display: block; /* Ensure the center line is visible */
+            }
+            .timeline-dot-wrapper {
+                left: 50%; 
+                transform: translateX(-50%);
+            }
+            .timeline-item {
+                display: flex;
+                align-items: stretch; /* Stretch children to align dots/line correctly */
+                justify-content: space-between;
+                padding: 0;
+            }
+
+            /* Content on the left side (1 and 3) */
+            .timeline-item:nth-child(2n+1) .timeline-card-content {
+                margin-left: auto;
+                max-width: 450px;
+                transform: translateX(-50px); /* Desktop initial slide-in from left */
+            }
+            .timeline-item:nth-child(2n+1) .timeline-card-content {
+                /* Ensure text is right-aligned in card when card is on the left side */
+                text-align: right;
+            }
+
+            /* Content on the right side (2) */
+            .timeline-item:nth-child(2n) .timeline-card-content {
+                margin-right: auto;
+                max-width: 450px;
+                transform: translateX(50px); /* Desktop initial slide-in from right */
+                text-align: left;
+            }
+
+            /* Content wrapper symmetry */
+            .timeline-item > div {
+                width: 50%;
+                box-sizing: border-box;
+            }
+            
+            /* Active State (Full opacity and no translation) */
+            .timeline-item.active .timeline-card-content { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+        /* --- END HOW IT WORKS: TIMELINE STYLES --- */
+
+
         /* --- CLIENT LOGO MARQUEE STYLES --- */
         .marquee-container {
             overflow: hidden;
@@ -253,21 +487,20 @@
 
         .logo-item {
             display: inline-block;
-            padding: 0 50px; /* Increased spacing */
-            height: 120px; /* Container height adjusted */
+            padding: 0 50px; 
+            height: 120px; 
             line-height: 120px;
         }
 
         .logo-item img {
-            height: 85px; /* Increased size */
-            width: 85px; /* Added width for circular aspect ratio */
+            height: 85px; 
+            width: 85px; 
             max-width: 100%;
             display: inline-block;
             vertical-align: middle;
             transition: transform 0.3s ease, filter 0.3s ease;
             filter: grayscale(100%);
             opacity: 0.4;
-            /* New: Make images round */
             border-radius: 50%; 
             object-fit: cover;
         }
@@ -284,11 +517,55 @@
         }
 
 
-        /* Arranged Positions (Target State when 'active' - Desktop/Tablet) */
         @media (min-width: 768px) {
-            /* Reinforced Hero Headline size to match the provided screenshot */
             .hero-headline { font-size: 6rem; } 
         }
+
+        /* --- MASSIVE TEXT STYLES (New Section) --- */
+        /* #massive-text-section {
+            padding-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            height: 450px; 
+            pointer-events: none; 
+        }
+        #massive-text {
+            font-size: 25vw; 
+            line-height: 0.8;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: -0.05em;
+            position: absolute;
+            bottom: -20px; 
+            width: 100%;
+            
+            color: var(--dark-background); 
+            -webkit-text-fill-color: transparent; 
+            -webkit-background-clip: text;
+            background-clip: text;
+            
+            background-image: linear-gradient(
+                to bottom,
+                var(--text-white) 70%,
+                rgba(255, 140, 0, 0.8) 90%, 
+                rgba(255, 140, 0, 0.2) 95%, 
+                rgba(255, 140, 0, 0) 100%
+            );
+            filter: blur(0.5px); 
+        }
+
+        @media (max-width: 767px) {
+             #massive-text-section {
+                 height: 100px; 
+             }
+             #massive-text {
+                 font-size: 33vw; 
+                 bottom: -0px;
+                 line-height: 0.7;
+             }
+        } */
+
 
         /* --- MASSIVE TEXT STYLES (New Section) --- */
         #massive-text-section {
@@ -296,47 +573,44 @@
             position: relative;
             z-index: 1;
             overflow: hidden;
-            height: 450px; /* Control height to crop the text (Desktop) */
-            pointer-events: none; /* Allows clicks to pass through to sections below */
+            height: 450px; 
+            pointer-events: none; 
         }
         #massive-text {
-            font-size: 25vw; /* Massive text size based on viewport width */
+            font-size: 25vw; 
             line-height: 0.8;
             font-weight: 900;
             text-align: center;
             letter-spacing: -0.05em;
             position: absolute;
-            bottom: -20px; /* Position it just above the footer line */
+            bottom: -20px; 
             width: 100%;
-            
-            /* The key effect: Text is black, but we only show the part where the gradient is not black */
-            color: var(--dark-background); /* Fallback color */
-            -webkit-text-fill-color: transparent; /* Must be transparent to let the gradient show */
-            -webkit-background-clip: text;
-            background-clip: text;
-            
-            /* Create the fading gradient, adapted to Orange/White */
-            background-image: linear-gradient(
-                to bottom,
-                var(--text-white) 70%,
-                rgba(255, 140, 0, 0.8) 90%, /* Orange fade start */
-                rgba(255, 140, 0, 0.2) 95%,  /* Faded orange/yellow effect */
-                rgba(255, 140, 0, 0) 100%
-            );
-            filter: blur(0.5px); /* Soften the edges slightly */
+            filter: blur(0.5px); /* Keep the subtle blur */
+        }
+        
+        /* New Styles for RIL and LIX */
+        #ril-text {
+            color: var(--text-white); /* Set RIL to White */
+        }
+        #lix-text {
+            /* Set LIX to your primary orange color */
+            color: var(--primary-orange); 
+            /* Optional: Add a slight text shadow for glow effect on LIX */
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.4); 
         }
 
-        /* Responsive adjustments for mobile screens */
         @media (max-width: 767px) {
-             #massive-text-section {
-                height: 100px; /* Reduce height on mobile */
+            /* Keep existing mobile-specific styles for the container */
+            #massive-text-section {
+                height: 100px; 
             }
             #massive-text {
-                font-size: 33vw; /* Keep it massive but adjust scale */
+                font-size: 33vw; 
                 bottom: -0px;
                 line-height: 0.7;
             }
         }
+
 
     </style>
 </head>
@@ -354,15 +628,20 @@
                         <span>RILL<span class="orange">IX</span></span>
                     </div>
                 </div>
+                
+                <div class="hidden md:flex nav-links-container">
+                    <div class="flex items-center space-x-6">
+                        <a href="./htw.html" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">How It Works</a>
+                        <a href="#metrics" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">Results</a>
+                        <a href="./public/index.php" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">Case Study</a>
+                        <a href="#pricing" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">Packages</a>
+                        <a href="./about.html" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">About</a>
+                    </div>
+                </div>
 
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="./htw.html" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">How It Works</a>
-                    <a href="#metrics" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">Results</a>
-                    <a href="./public/index.php" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">Case Study</a>
-                    <a href="#pricing" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">Packages</a>
-                    <a href="#about-us" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">About</a>
-                    <a href="#footer" class="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-orange-600 to-orange-800 rounded-lg button-3d transition duration-300 hover-lift">
-                        SCHEDULE A CALL
+                <div class="hidden md:flex items-center ml-6">
+                    <a href="#footer" class="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-orange-600 to-orange-800 rounded-lg button-3d transition duration-300">
+                        BOOK A CALL
                     </a>
                 </div>
 
@@ -380,13 +659,13 @@
         </div>
 
         <nav class="flex flex-col space-y-6" id="mobile-nav-links">
-            <a href="#holistic-focus" class="mobile-nav-link">How It Works</a>
+            <a href="./htw.html" class="mobile-nav-link">How It Works</a>
             <a href="#metrics" class="mobile-nav-link">Results</a>
             <a href="./public/index.php" class="mobile-nav-link">Case Study</a>
             <a href="#pricing" class="mobile-nav-link">Packages</a>
             <a href="#about-us" class="mobile-nav-link">About</a>
             <a href="#footer" class="mobile-nav-link cta-mobile pt-8 text-xl font-bold bg-gradient-to-r from-orange-500 to-orange-700 text-black rounded-lg text-center p-4 shadow-lg">
-                SCHEDULE A CALL
+                BOOK A CALL
             </a>
         </nav>
     </div>
@@ -399,7 +678,7 @@
         <div class="hero-content max-w-5xl mx-auto px-4 relative z-10">
             
             <h1 class="hero-headline font-extrabold mb-6 leading-tight" id="hero-headline">
-                Podcast Distribution <br>for 
+                Podcast for
                 <span id="rotating-audience" class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-purple-500 to-blue-500 revealing">
                     </span>
             </h1>
@@ -430,9 +709,6 @@
 
     <section id="client-logos" class="py-12 bg-section-bg">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <h3 class="text-lg font-semibold uppercase text-gray-500 mb-8 tracking-wider scroll-reveal">
-                Trusted by Top VCs, Founders, and Operators
-            </h3>
             
             <div class="marquee-container scroll-reveal" style="transition-delay: 0.2s;">
                 <div class="marquee-content" id="logo-marquee">
@@ -443,119 +719,295 @@
 
     <section id="testimonials" class="py-24 bg-dark-background relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <h2 class="text-4xl font-extrabold text-center mb-4 scroll-reveal">Client Validation</h2>
-            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto scroll-reveal" style="transition-delay: 0.2s;">
-                Trusted by industry leaders who scaled their influence with RILLIX
-            </p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="interactive-card p-8 rounded-xl scroll-reveal hover-lift">
-                    <div class="flex items-start mb-6">
-                        <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
-                        <div>
-                            <p class="text-xl font-semibold text-white mb-4 transition-colors">"Exceptional service that consistently drives sales growth."</p>
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-600 to-orange-800 flex items-center justify-center text-white font-bold mr-3">A</div>
+            <div id="testimonials-scroller-container">
+                
+                <button id="prev-testimonial" class="carousel-nav-btn"><i class="fas fa-arrow-left"></i></button>
+                <button id="next-testimonial" class="carousel-nav-btn"><i class="fas fa-arrow-right"></i></button>
+
+                <div class="testimonial-page active" data-page="1">
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
                                 <div>
-                                    <p class="font-bold text-white">Adi Mukon</p>
-                                    <p class="text-sm text-gray-500">Digital Founder (Testimonial from Framer site)</p>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"Exceptional service that consistently drives sales growth."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-600 to-orange-800 flex items-center justify-center text-white font-bold mr-3">A</div>
+                                        <div>
+                                            <p class="font-bold text-white">Adi Mukon</p>
+                                            <p class="text-sm text-gray-500">Digital Founder (Testimonial from Framer site)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-chart-line text-green-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">New testimonial data will be pulled from Framer site</span></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="pt-6">
-                        <div class="flex items-center text-sm text-gray-400">
-                            <i class="fas fa-chart-line text-green-400 mr-2"></i>
-                            <span>Result: <span class="text-gray-300">New testimonial data will be pulled from Framer site</span></span>
+
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal" style="transition-delay: 0.1s;">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
+                                <div>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"I'm very lucky for choosing Rillix. The service was phenomenal, keep going."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-800 flex items-center justify-center text-white font-bold mr-3">R</div>
+                                        <div>
+                                            <p class="font-bold text-white">Ram</p>
+                                            <p class="text-sm text-gray-500">Auto Enthusiast & Investor (Testimonial from Framer site)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-users-crown text-blue-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">+15K new followers in 60 days</span></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="interactive-card p-8 rounded-xl scroll-reveal hover-lift" style="transition-delay: 0.2s;">
-                    <div class="flex items-start mb-6">
-                        <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
-                        <div>
-                            <p class="text-xl font-semibold text-white mb-4 transition-colors">"I'm very lucky for choosing Rillix. The service was phenomenal, keep going."</p>
-                            <div class="flex items-center">
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-800 flex items-center justify-center text-white font-bold mr-3">R</div>
+                <div class="testimonial-page" data-page="2">
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal" style="transition-delay: 0.2s;">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
                                 <div>
-                                    <p class="font-bold text-white">Ram</p>
-                                    <p class="text-sm text-gray-500">Auto Enthusiast & Investor (Testimonial from Framer site)</p>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"RILLIX transformed our LinkedIn presence and drove direct deal engagement."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-600 to-teal-800 flex items-center justify-center text-white font-bold mr-3">J</div>
+                                        <div>
+                                            <p class="font-bold text-white">Jane Doe</p>
+                                            <p class="text-sm text-gray-500">VC Partner, Quantum Ventures</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-handshake text-yellow-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">3 new inbound deal conversations in Q4</span></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="pt-6">
-                        <div class="flex items-center text-sm text-gray-400">
-                            <i class="fas fa-users-crown text-blue-400 mr-2"></i>
-                            <span>Result: <span class="text-gray-300">+15K new followers in 60 days</span></span>
+
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal" style="transition-delay: 0.3s;">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
+                                <div>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"The level of detail in repurposing is unmatched. Truly strategic content partners."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-red-600 to-pink-800 flex items-center justify-center text-white font-bold mr-3">M</div>
+                                        <div>
+                                            <p class="font-bold text-white">Mark Chen</p>
+                                            <p class="text-sm text-gray-500">Head of Marketing, BioGen</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-hospital text-red-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">50% increase in brand search volume</span></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <div class="testimonial-page" data-page="3">
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
+                                <div>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"Exceptional service that consistently drives sales growth."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-600 to-orange-800 flex items-center justify-center text-white font-bold mr-3">A</div>
+                                        <div>
+                                            <p class="font-bold text-white">Adi Mukon</p>
+                                            <p class="text-sm text-gray-500">Digital Founder (Testimonial from Framer site)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-chart-line text-green-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">New testimonial data will be pulled from Framer site</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-page" data-page="4">
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
+                                <div>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"I'm very lucky for choosing Rillix. The service was phenomenal, keep going."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-800 flex items-center justify-center text-white font-bold mr-3">R</div>
+                                        <div>
+                                            <p class="font-bold text-white">Ram</p>
+                                            <p class="text-sm text-gray-500">Auto Enthusiast & Investor (Testimonial from Framer site)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-users-crown text-blue-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">+15K new followers in 60 days</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-page" data-page="5">
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
+                                <div>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"RILLIX transformed our LinkedIn presence and drove direct deal engagement."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-600 to-teal-800 flex items-center justify-center text-white font-bold mr-3">J</div>
+                                        <div>
+                                            <p class="font-bold text-white">Jane Doe</p>
+                                            <p class="text-sm text-gray-500">VC Partner, Quantum Ventures</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-handshake text-yellow-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">3 new inbound deal conversations in Q4</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-page" data-page="6">
+                    <div class="testimonial-card-wrapper">
+                        <div class="interactive-card p-8 rounded-xl scroll-reveal">
+                            <div class="flex items-start mb-6">
+                                <div class="text-5xl text-orange-500 font-serif mr-4">"</div>
+                                <div>
+                                    <p class="text-xl font-semibold text-white mb-4 transition-colors">"The level of detail in repurposing is unmatched. Truly strategic content partners."</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-red-600 to-pink-800 flex items-center justify-center text-white font-bold mr-3">M</div>
+                                        <div>
+                                            <p class="font-bold text-white">Mark Chen</p>
+                                            <p class="text-sm text-gray-500">Head of Marketing, BioGen</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pt-6">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-hospital text-red-400 mr-2"></i>
+                                    <span>Result: <span class="text-gray-300">50% increase in brand search volume</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+            
         </div>
     </section>
     
-    <section id="holistic-focus" class="py-24 relative overflow-hidden">
-    <div class="max-w-6xl mx-auto px-4 relative z-10">
-        <h2 class="text-4xl font-extrabold text-center mb-4 scroll-reveal">How It Works: The Content Engine</h2>
-        <p class="text-center text-gray-400 mb-20 max-w-2xl mx-auto px-4 scroll-reveal" style="transition-delay: 0.2s;">
-            We turn one conversation into a massive content engine. Scroll down to see the transformation.
-        </p>
-        
-        <div id="scatter-container" class="mx-auto">
-            
-            <div id="card-1" class="scatter-card interactive-card scroll-reveal">
-                <a href="htw.html"> 
-                    <i class="fas fa-microphone text-4xl text-orange-500 mb-4"></i>
-                    <h3 class="text-2xl font-bold text-white mb-2">1. The Core Conversation</h3>
-                    <p class="text-gray-400 mb-4">
-                        A single podcast recording session with a guest or host is all it takes. We handle the production and strategic recording for content hooks.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-500 text-sm">
-                        <li>Full Audio Episode</li>
-                        <li>Full Video Episode (YouTube)</li>
-                    </ul>
-                </a>
+    <section id="holistic-focus" class="py-24 bg-dark-background relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-4 relative z-10">
+            <h2 class="text-4xl font-extrabold text-center mb-4 scroll-reveal">How It Works</h2>
+            <div id="timeline-container" class="relative">
+                <div class="timeline-line hidden md:block"></div>
+
+                <div class="timeline-item flex md:justify-center mb-24 scroll-reveal" id="timeline-card-1">
+                    <div class="md:w-1/2 md:pr-12 flex-shrink-0">
+                        <a href="htw.html" class="interactive-card timeline-card-content p-6 rounded-xl">
+                            <i class="fas fa-microphone text-3xl text-orange-500 mb-2"></i>
+                            <h3 class="text-2xl font-bold text-white mb-2">1. The Core Conversation</h3>
+                            <p class="text-gray-400 mb-4">
+                                A single podcast recording session with a guest or host is all it takes. We handle the production and strategic recording for content hooks.
+                            </p>
+                            <ul class="list-disc list-inside text-gray-500 text-sm pl-4">
+                                <li>Full Audio Episode</li>
+                                <li>Full Video Episode (YouTube)</li>
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot bg-orange-500"><i class="fas fa-play text-xs text-black"></i></div>
+                    </div>
+                    <div class="hidden md:block w-1/2"></div>
+                </div>
+
+                <div class="timeline-item flex md:justify-center mb-24 scroll-reveal" id="timeline-card-2" style="transition-delay: 0.3s;">
+                    <div class="hidden md:block w-1/2"></div>
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot bg-purple-500"><i class="fas fa-sitemap text-xs text-black"></i></div>
+                    </div>
+                    <div class="md:w-1/2 md:pl-12 flex-shrink-0">
+                        <a href="htw.html" class="interactive-card timeline-card-content p-6 rounded-xl">
+                            <i class="fas fa-sitemap text-3xl text-purple-500 mb-2"></i>
+                            <h3 class="text-2xl font-bold text-white mb-2">2. Repurposing & Atomization</h3>
+                            <p class="text-gray-400 mb-4">
+                                We extract the most viral, valuable, and quotable moments. This turns minutes of discussion into a multi-format asset library.
+                            </p>
+                            <ul class="list-disc list-inside text-gray-500 text-sm pl-4">
+                                <li>3 Long-Form Clips (LinkedIn/YouTube)</li>
+                                <li>4 Short Reels/TikToks (Viral Focus)</li>
+                                <li>SEO Article & Snippets</li>
+                            </ul>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="timeline-item flex md:justify-center mb-0 scroll-reveal" id="timeline-card-3" style="transition-delay: 0.6s;">
+                    <div class="md:w-1/2 md:pr-12 flex-shrink-0">
+                        <a href="htw.html" class="interactive-card timeline-card-content p-6 rounded-xl">
+                            <i class="fas fa-rocket text-3xl text-blue-500 mb-2"></i>
+                            <h3 class="text-2xl font-bold text-white mb-2">3. Strategic Distribution</h3>
+                            <p class="text-gray-400 mb-4">
+                                Content is worthless without reach. We deploy all 30+ assets across paid and organic channels where founders and LPs pay attention.
+                            </p>
+                            <ul class="list-disc list-inside text-gray-500 text-sm pl-4">
+                                <li>Social Media Management</li>
+                                <li>Targeted Paid Promotion</li>
+                                <li>Attract Quality Deal Flow</li>
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="timeline-dot-wrapper">
+                        <div class="timeline-dot bg-blue-500"><i class="fas fa-bullhorn text-xs text-black"></i></div>
+                    </div>
+                    <div class="hidden md:block w-1/2"></div>
+                </div>
             </div>
 
-            <div id="card-2" class="scatter-card interactive-card scroll-reveal" style="transition-delay: 0.4s;">
-                 <a href="htw.html">
-                    <i class="fas fa-sitemap text-4xl text-purple-500 mb-4"></i>
-                    <h3 class="text-2xl font-bold text-white mb-2">2. Repurposing & Atomization</h3>
-                    <p class="text-gray-400 mb-4">
-                        We extract the most viral, valuable, and quotable moments. This turns minutes of discussion into a multi-format asset library.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-500 text-sm">
-                        <li>3 Long-Form Clips (LinkedIn/YouTube)</li>
-                        <li>4 Short Reels/TikToks (Viral Focus)</li>
-                        <li>SEO Article & Snippets</li>
-                    </ul>
-                </a>
             </div>
-
-            <div id="card-3" class="scatter-card interactive-card scroll-reveal" style="transition-delay: 0.8s;">
-                 <a href="htw.html">
-                    <i class="fas fa-rocket text-4xl text-blue-500 mb-4"></i>
-                    <h3 class="text-2xl font-bold text-white mb-2">3. Strategic Distribution</h3>
-                    <p class="text-gray-400 mb-4">
-                        Content is worthless without reach. We deploy all 30+ assets across paid and organic channels where founders and LPs pay attention.
-                    </p>
-                    <ul class="list-disc list-inside text-gray-500 text-sm">
-                        <li>Social Media Management</li>
-                        <li>Targeted Paid Promotion</li>
-                        <li>Attract Quality Deal Flow</li>
-                    </ul>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
     <section id="metrics" class="py-20 bg-dark-background relative overflow-hidden">
         
         <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <h2 class="text-4xl font-extrabold text-center mb-16 scroll-reveal">Results That Build Authority</h2>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
                 
                 <div class="metric-card interactive-card p-8 rounded-xl scroll-reveal" data-count="2198" data-prefix="" data-suffix="+" style="transition-delay: 0s;">
@@ -585,38 +1037,44 @@
         </div>
     </section>
 
-    <section id="video-showcase" class="py-20 bg-section-bg relative overflow-hidden">
+    <section id="video-showcase" class="py-20 bg-section-bg">
         <div class="max-w-7xl mx-auto px-4 relative z-10">
             <h2 class="text-4xl font-extrabold text-center mb-16 scroll-reveal">See the Impact</h2>
             
             <div class="max-w-4xl mx-auto mb-8 scroll-reveal" style="transition-delay: 0.2s;">
-                <div class="aspect-video bg-gray-900 rounded-xl shadow-2xl border border-purple-500/30 flex items-center justify-center">
-                    <i class="fab fa-youtube text-6xl text-purple-600/50"></i>
-                    <p class="text-xl text-gray-500 ml-4">Video Showcase Placeholder</p>
+                <!-- <p class="text-lg font-bold text-center text-orange-400 mb-4">Full Podcast Episode Showcase</p> -->
+                
+                <div class="rounded-xl shadow-2xl border border-purple-500/30 overflow-hidden">
+                    <script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/al0gchkzc4.js" async type="module"></script><style>wistia-player[media-id='al0gchkzc4']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/al0gchkzc4/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player media-id="al0gchkzc4" aspect="1.7777777777777777"></wistia-player>
                 </div>
-                <p class="text-sm text-gray-700 mt-4 text-center">Video source: Recording 2025-11-09 162342.mp4</p>
+                </div>
+            
+            <!-- <p class="text-xl font-bold text-center text-purple-400 mb-6 scroll-reveal" style="transition-delay: 0.4s;">Repurposed Vertical Clips (Viral Focus)</p> -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                
+                <div class="scroll-reveal" style="transition-delay: 0.5s;">
+                    <div class="aspect-[9/16] bg-gray-900 rounded-xl shadow-2xl border border-orange-500/30 overflow-hidden">
+                        <script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/73yfx3tydr.js" async type="module"></script><style>wistia-player[media-id='73yfx3tydr']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/73yfx3tydr/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="73yfx3tydr" aspect="0.5625"></wistia-player>
+                    </div>
+                    </div>
+                
+                <div class="scroll-reveal" style="transition-delay: 0.6s;">
+                    <div class="aspect-[9/16] bg-gray-900 rounded-xl shadow-2xl border border-blue-500/30 overflow-hidden">
+                        <script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/5eirf4zgiq.js" async type="module"></script><style>wistia-player[media-id='5eirf4zgiq']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/5eirf4zgiq/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="5eirf4zgiq" aspect="0.5625"></wistia-player>
+                    </div>
+                    </div>
+                
             </div>
             
-            <p class="text-center text-gray-400 max-w-xl mx-auto scroll-reveal" style="transition-delay: 0.4s;">
-                This example highlights the quality and versatility of content we produce for distribution across all your key platforms.
-            </p>
-
-        </div>
+            </div>
     </section>
-    
     <section id="pricing" class="py-24 bg-dark-background">
         <div class="max-w-6xl mx-auto px-4 relative z-10">
-            <h2 class="text-4xl font-extrabold text-center mb-4 scroll-reveal">Select Your Package</h2>
+            <h2 class="text-4xl font-extrabold text-center mb-4 scroll-reveal">Select Your Suite</h2>
             <p class="text-center text-gray-400 mb-12 max-w-lg mx-auto scroll-reveal" style="transition-delay: 0.2s;">
                 Two powerful solutions tailored to your growth stage
             </p>
-            
-            <div class="flex justify-center mb-16 scroll-reveal" style="transition-delay: 0.3s;">
-                <div class="pricing-toggle-container inline-flex w-fit">
-                    <button id="toggle-optimise" class="pricing-toggle-btn active">OPTIMISE</button>
-                    <button id="toggle-nexus" class="pricing-toggle-btn">NEXUS</button>
-                </div>
-            </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 
@@ -662,13 +1120,13 @@
                     </div>
                     
                     <div class="text-center">
-                        <a href="#footer" class="inline-block w-full py-4 text-white rounded-xl cta-minimal hover-lift">
+                        <a href="#footer" class="inline-block w-full py-4 text-white rounded-xl cta-minimal">
                             <i class="fas fa-calendar-alt mr-2"></i> SCHEDULE OPTIMISE CALL
                         </a>
                     </div>
                 </div>
 
-                <div id="nexus-card" class="interactive-card pricing-card p-8 rounded-xl scroll-reveal" style="transition-delay: 0.4s;">
+                <div id="nexus-card" class="interactive-card pricing-card p-8 rounded-xl scroll-reveal active" style="transition-delay: 0.4s;">
                     <div class="absolute top-0 right-0 translate-y-[-50%] translate-x-[20%]">
                         <div class="bg-gradient-to-r from-orange-600 to-purple-600 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg shadow-purple-900/30 rotate-3">
                             MOST POPULAR
@@ -728,42 +1186,10 @@
                     </div>
                     
                     <div class="text-center">
-                        <a href="#footer" class="inline-block w-full py-4 font-bold rounded-xl cta-premium hover-lift">
+                        <a href="#footer" class="inline-block w-full py-4 font-bold rounded-xl cta-premium">
                             <i class="fas fa-rocket mr-2"></i> LAUNCH NEXUS
                         </a>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about-us" class="py-24 bg-section-bg">
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                
-                <div class="scroll-reveal">
-                    <h2 class="text-4xl font-extrabold mb-6 text-orange-400">About RILLIX Media</h2>
-                    <p class="text-gray-300 mb-6 text-lg">
-                        RILLIX Media is the full-service podcast agency for top-tier founders, VCs, and operators in Tech & Health Tech.
-                    </p>
-                    <p class="text-gray-400 mb-6">
-                        Our expertise lies in strategic distribution. We handle the entire process, from guest research and prep to post-production, all with the goal of amplifying your message. We turn your episode into a content engine, ensuring your unique thinking reaches the high-value audience that matters most.
-                    </p>
-                    <p class="text-xl font-bold text-white mb-2">Great Conversations Deserve Great Distribution.</p>
-                    <p class="text-lg font-bold text-orange-500">You speak. We handle the rest.</p>
-                </div>
-
-                <div class="scroll-reveal" style="transition-delay: 0.2s;">
-                    <h2 class="text-4xl font-extrabold mb-6 text-purple-400">Our Story</h2>
-                    <p class="text-gray-400 mb-6">
-                        We built RILLIX Media because we’d seen too many brilliant podcasts stall. They'd launch with powerful guests and sharp insights, only to lose momentum. While a creator knows how to utilize content, VCs and tech leaders have a different focus; that's the gap we found.
-                    </p>
-                    <p class="text-gray-400 mb-6">
-                        Founded by Sanjay, who brings 7 years of deep content creation experience, our expert team handles guest research, production, post-production, and strategic distribution.
-                    </p>
-                    <p class="text-lg font-bold text-gray-300">
-                        Our job is to ensure they are.
-                    </p>
                 </div>
             </div>
         </div>
@@ -815,10 +1241,10 @@
         </div>
     </section>
 <section id="massive-text-section" class="relative bg-black">
-        <div id="massive-text">
-            RILLIX
-        </div>
-    </section>
+    <div id="massive-text">
+        <span id="ril-text">RIL</span><span id="lix-text">LIX</span>
+    </div>
+</section>
 
     <footer id="footer" class="py-6 bg-black border-t border-gray-900 z-10 relative">
         <div class="max-w-7xl mx-auto px-4">
@@ -826,7 +1252,7 @@
                 
                 <div class="flex items-center space-x-4 mb-4 sm:mb-0">
                     <div class="logo-text text-xl font-bold text-white">
-                        RILL<span class="text-orange-500">IX</span>
+                        RIL<span class="text-orange-500">LIX</span>
                     </div>
                     <p class="text-gray-600 text-xs sm:text-sm">
                         &copy; 2025 RILLIX Media.
@@ -834,7 +1260,7 @@
                 </div>
 
                 <div class="flex space-x-6 text-sm mb-4 sm:mb-0">
-                    <a href="#about-us" class="text-gray-300 hover:text-orange-500 transition-colors">About</a>
+                    <a href="./about.html" class="text-gray-300 hover:text-orange-500 transition-colors">About</a>
                     <a href="#" class="text-gray-300 hover:text-orange-500 transition-colors">Legal Docs</a>
                     <a href="#footer" class="text-gray-300 hover:text-orange-500 transition-colors">Join our team</a>
                 </div>
@@ -882,15 +1308,15 @@
             }, 1000); 
             
             // Initializations
-            initAudienceRotator(); // NEW: Initialize rotating text effect
-            initMarqueeScroll(); // NEW: Initialize infinite logo scroll
-            initScrollReveal();
+            initAudienceRotator(); 
+            initMarqueeScroll(); 
+            initScrollReveal(); 
             initCounting();
-            initPricingToggle();
             initMicroInteractions();
-            initCardTilt(); // This handles the 3D card animation
+            initCardTilt(); 
             initNavScroll();
             initMobileMenu();
+            initTestimonialCarousel(); 
         });
 
         // --- NEW AUDIENCE ROTATOR LOGIC (Glitch Effect) ---
@@ -898,55 +1324,165 @@
             const audienceElement = document.getElementById('rotating-audience');
             if (!audienceElement) return;
 
-            // Note: The comma is inside the word to ensure the gradient applies correctly.
             const audiences = ["VCs,", "Tech,", "Health Tech"];
             let currentIndex = 0;
-            const cycleDuration = 3000; // Total time for one cycle (visible + transition)
-            const glitchDuration = 500; // Time the glitch animation runs
+            const cycleDuration = 3000; 
+            const glitchDuration = 500; 
 
             function updateText() {
-                // 1. Start Glitch (Hide current text)
                 audienceElement.classList.add('glitching');
                 audienceElement.classList.remove('revealing');
                 
                 setTimeout(() => {
-                    // 2. Swap Text (During peak glitch)
                     currentIndex = (currentIndex + 1) % audiences.length;
                     audienceElement.innerHTML = audiences[currentIndex];
                     
-                    // 3. Stop Glitch and Reveal
                     audienceElement.classList.remove('glitching');
                     audienceElement.classList.add('revealing');
                     
-                    // 4. Schedule next update
                     setTimeout(updateText, cycleDuration);
                 }, glitchDuration);
             }
 
-            // Set initial text before starting the loop
             audienceElement.innerHTML = audiences[0];
             setTimeout(updateText, cycleDuration);
         }
         // --- END AUDIENCE ROTATOR LOGIC ---
+        
+        // --- 🔑 UPDATED: TESTIMONIALS AUTO-SWITCH LOGIC (Sliding/Fading, Mobile Single Card Logic) ---
+        function initTestimonialCarousel() {
+            const container = document.getElementById('testimonials-scroller-container');
+            const allPages = container.querySelectorAll('.testimonial-page');
+            const prevBtn = document.getElementById('prev-testimonial');
+            const nextBtn = document.getElementById('next-testimonial');
+            let pages; // Stores the pages actually used for rotation
+            let totalPages;
+            let currentPage = 0;
+            const switchInterval = 6000; // Auto switch every 6 seconds
+            const animationDuration = 800; // Match CSS animation time
+            let autoSwitchTimer;
+
+            const isMobile = window.matchMedia('(max-width: 767px)').matches;
+            
+            if (isMobile) {
+                // Use pages 3, 4, 5, 6 for single card rotation on mobile
+                pages = Array.from(allPages).filter(page => page.dataset.page >= 3);
+            } else {
+                // Use pages 1, 2 for two-card rotation on desktop
+                pages = Array.from(allPages).filter(page => page.dataset.page <= 2);
+            }
+            totalPages = pages.length;
+
+
+            function transitionPage(oldIndex, newIndex, direction) {
+                // Clear all transition classes on all relevant pages
+                pages.forEach(p => p.classList.remove('active', 'slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right'));
+
+                const outgoingPage = pages[oldIndex];
+                const incomingPage = pages[newIndex];
+
+                // 1. Start outgoing animation
+                if (outgoingPage) {
+                    outgoingPage.classList.add(direction === 'next' ? 'slide-out-left' : 'slide-out-right');
+                    outgoingPage.style.opacity = '0'; 
+                }
+
+                // 2. Set up incoming page state (initially hidden)
+                incomingPage.style.opacity = '0';
+                incomingPage.style.visibility = 'visible';
+                incomingPage.classList.add('active'); 
+
+                // 3. Start incoming animation shortly after 
+                setTimeout(() => {
+                    incomingPage.classList.add(direction === 'next' ? 'slide-in-right' : 'slide-in-left');
+                    incomingPage.style.opacity = '1';
+                }, 50);
+
+                // 4. Clean up after transition
+                setTimeout(() => {
+                    pages.forEach((p, i) => {
+                        p.classList.remove('slide-in-right', 'slide-out-left', 'slide-in-left', 'slide-out-right');
+                        p.style.opacity = (i === newIndex) ? '1' : '0';
+                        p.style.visibility = (i === newIndex) ? 'visible' : 'hidden';
+                        p.style.transform = ''; 
+                    });
+                }, animationDuration + 100);
+            }
+
+            function showPage(index, direction, resetTimer = true) {
+                const oldIndex = currentPage;
+                let newIndex = index;
+
+                // Ensure index wraps correctly
+                if (newIndex < 0) {
+                    newIndex = totalPages - 1;
+                } else if (newIndex >= totalPages) {
+                    newIndex = 0;
+                }
+                
+                // Hide all pages first
+                allPages.forEach(p => {
+                    p.classList.remove('active');
+                    p.style.opacity = '0';
+                    p.style.visibility = 'hidden';
+                });
+
+
+                if (oldIndex === newIndex) {
+                    // Initial load: show the first page instantly
+                    if (pages[newIndex]) {
+                        pages[newIndex].classList.add('active');
+                        pages[newIndex].style.opacity = '1';
+                        pages[newIndex].style.visibility = 'visible';
+                    }
+                } else {
+                    // Perform animated transition
+                    transitionPage(oldIndex, newIndex, direction);
+                }
+
+                currentPage = newIndex;
+
+                if (resetTimer) {
+                    resetAutoSwitch();
+                }
+            }
+
+            function resetAutoSwitch() {
+                clearInterval(autoSwitchTimer);
+                if (totalPages > 1) {
+                    autoSwitchTimer = setInterval(() => showPage(currentPage + 1, 'next', false), switchInterval);
+                }
+            }
+
+            // Initialization logic
+            if (pages.length > 0) {
+                // Ensure correct visibility on load for non-mobile pages if mobile pages are defined later in HTML
+                pages.forEach(p => {
+                    if (p.dataset.page > 2 && !isMobile) {
+                        p.style.visibility = 'hidden';
+                    } else if (p.dataset.page <= 2 && isMobile) {
+                        p.style.visibility = 'hidden';
+                    }
+                });
+
+                showPage(0, 'next', true); // Start on the first relevant page
+
+                // Navigation Handlers
+                prevBtn.addEventListener('click', () => showPage(currentPage - 1, 'prev'));
+                nextBtn.addEventListener('click', () => showPage(currentPage + 1, 'next'));
+            }
+        }
+        // --- END UPDATED TESTIMONIALS AUTO-SWITCH LOGIC ---
+
 
         // --- NEW INFINITE MARQUEE LOGIC ---
         function initMarqueeScroll() {
             const marquee = document.getElementById('logo-marquee');
             if (!marquee) return;
 
-            // Placeholder structure based on user's request for dynamic loading
-            // IMPORTANT: These paths are placeholders. Replace them with actual image paths.
             const logoSources = [
-                './assets/web_img/1.avif',
-                './assets/web_img/2.avif',
-                './assets/web_img/3.avif',
-                './assets/web_img/4.avif',
-                './assets/web_img/5.avif',
-                './assets/web_img/6.avif',
-                './assets/web_img/7.avif',
-                './assets/web_img/8.avif',
-                './assets/web_img/9.avif',
-                './assets/web_img/10.avif'
+                './assets/web_img/1.avif', './assets/web_img/2.avif', './assets/web_img/3.avif', './assets/web_img/4.avif', './assets/web_img/5.avif', 
+                './assets/web_img/6.avif', './assets/web_img/7.avif', './assets/web_img/8.avif', './assets/web_img/9.avif', './assets/web_img/10.avif'
             ];
 
             function createLogoElement(src) {
@@ -959,20 +1495,12 @@
                 return item;
             }
 
-            // 1. Populate initial content
             logoSources.forEach(src => {
                 marquee.appendChild(createLogoElement(src));
             });
-
-            // 2. Clone content for infinite scroll
-            const marqueeContainer = marquee.parentElement;
-            
-            // We clone the original content twice to ensure a seamless, continuous loop
             const originalContent = marquee.innerHTML;
             marquee.innerHTML += originalContent; 
-            marquee.innerHTML += originalContent; // A triple set often guarantees a seamless loop regardless of screen size
-            
-            // Note: The animation speed is controlled by the CSS keyframes `marquee-scroll`
+            marquee.innerHTML += originalContent; 
         }
         // --- END INFINITE MARQUEE LOGIC ---
 
@@ -998,11 +1526,9 @@
                 mobileMenu.classList.toggle('open'); 
             };
 
-            // Open/Close on button click
             menuButton.addEventListener('click', toggleMenu);
             menuClose.addEventListener('click', toggleMenu);
 
-            // Close on link click (for smooth scrolling)
             mobileLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     setTimeout(toggleMenu, 300); 
@@ -1026,13 +1552,11 @@
             }
         }
         
-        // --- 3D CARD TILT (Reinforced for Scatter/Interactive Cards) ---
+        // --- 3D CARD TILT (Retained) ---
         function initCardTilt() {
-            // Apply to all interactive cards, including scatter cards
-            const cards = document.querySelectorAll('.interactive-card, .scatter-card');
+            const cards = document.querySelectorAll('.interactive-card, .timeline-card-content');
             cards.forEach(card => {
-                // Store the initial transform style for scatter cards when they are scattered
-                let initialScatterTransform = card.classList.contains('scatter-card') && !card.closest('#scatter-container.active') ? card.style.transform : '';
+                let initialScatterTransform = card.classList.contains('timeline-card-content') && !card.closest('#timeline-container.active') ? card.style.transform : '';
 
                 card.addEventListener('mousemove', (e) => {
                     const rect = card.getBoundingClientRect();
@@ -1045,58 +1569,52 @@
                     const rotateY = ((centerX - x) / centerX) * 5;
                     const tiltTransform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                     
-                    if (card.classList.contains('scatter-card')) {
-                        const isArranged = card.closest('#scatter-container').classList.contains('active');
+                    if (card.closest('.timeline-item')) { // Check if it's a timeline card
+                        const isArranged = card.closest('#timeline-container');
                         
                         if (isArranged) {
-                            // When arranged (active), apply standard tilt + slight scale
                             card.style.transform = `${tiltTransform} scale(1.01)`;
                         } else {
-                            // When scattered, append tilt to the existing scatter transform
-                            // This ensures the card stays in its scattered position while tilting
                             if (!initialScatterTransform) {
                                 initialScatterTransform = card.style.transform || window.getComputedStyle(card).transform;
                             }
-                            // Clean existing tilt before applying new one
                             const cleanTransform = initialScatterTransform.replace(/perspective\(.*?\)/g, '').replace(/rotateX\(.*?\)/g, '').replace(/rotateY\(.*?\)/g, '').trim();
                             card.style.transform = `perspective(1000px) ${cleanTransform} rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                         }
                     } else {
-                        // Standard interactive card (Pricing, Testimonials, FAQ)
                         card.style.transform = `${tiltTransform} scale(1.01)`;
                     }
                 });
                 
                 card.addEventListener('mouseleave', () => {
-                    if (card.classList.contains('scatter-card')) {
-                        const isArranged = card.closest('#scatter-container').classList.contains('active');
+                    if (card.closest('.timeline-item')) {
+                        const isArranged = card.closest('#timeline-container');
                         
                         if (isArranged) {
-                            // Reset arranged card to its flow state (empty string)
                             card.style.transform = '';
                         } else {
-                            // Reset scattered card to its complex initial position
                             card.style.transform = initialScatterTransform;
                         }
                     } else {
-                        // Standard cards reset to CSS default/lift hover
                         card.style.transform = '';
                     }
-                    initialScatterTransform = ''; // Clear stored transform
+                    initialScatterTransform = ''; 
                 });
             });
         }
 
-        // --- SCROLL REVEAL (and Scatter Card Arrangement) ---
+        // --- SCROLL REVEAL (UPDATED FOR TIMELINE) ---
         function initScrollReveal() {
-            const scrollReveals = document.querySelectorAll('.scroll-reveal');
-            const scatterContainer = document.getElementById('scatter-container');
+            // Target both general .scroll-reveal and specific .timeline-item elements
+            const scrollReveals = document.querySelectorAll('.scroll-reveal:not(.timeline-item)');
+            const timelineItems = document.querySelectorAll('.timeline-item');
             
-            const observer = new IntersectionObserver((entries) => {
+            // Observer for general elements (titles, paragraphs, etc.)
+            const generalObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    const target = entry.target;
                     if (entry.isIntersecting) {
-                        target.classList.add('active');
+                        entry.target.classList.add('active');
+                        generalObserver.unobserve(entry.target);
                     }
                 });
             }, {
@@ -1104,22 +1622,29 @@
                 rootMargin: '0px 0px -50px 0px'
             });
             
-            scrollReveals.forEach(el => observer.observe(el));
-            
-            // Separate observer for the scatter container for a precise trigger
-            if (scatterContainer) {
-                 const scatterObserver = new IntersectionObserver(entries => {
-                    if (entries[0].isIntersecting) {
-                        scatterContainer.classList.add('active');
+            scrollReveals.forEach(el => generalObserver.observe(el));
+
+
+            // Observer for the Timeline Items (higher threshold for process visibility)
+            const timelineObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // The item animation runs on active, no need for stagger delay here as it's built into the scroll-reveal CSS/HTML
+                        observer.unobserve(entry.target);
                     }
-                }, {
-                    threshold: 0.6 // Trigger the arrangement when 60% of the container is visible
                 });
-                scatterObserver.observe(scatterContainer);
-            }
+            }, {
+                threshold: 0.5, // Trigger when half of the item is visible
+                rootMargin: '0px 0px -100px 0px'
+            });
+
+            timelineItems.forEach(el => timelineObserver.observe(el));
+            
         }
+        // --- END SCROLL REVEAL ---
         
-        // --- COUNTING ANIMATIONS (Kept as is) ---
+        // --- COUNTING ANIMATIONS (Retained) ---
         function initCounting() {
             const counters = document.querySelectorAll('.counting');
             
@@ -1158,29 +1683,7 @@
             counters.forEach(el => countObserver.observe(el));
         }
         
-        // --- PRICING TOGGLE (Kept as is) ---
-        function initPricingToggle() {
-            const toggleOptimise = document.getElementById('toggle-optimise');
-            const toggleNexus = document.getElementById('toggle-nexus');
-            const optimiseCard = document.getElementById('optimise-card');
-            const nexusCard = document.getElementById('nexus-card');
-            
-            const updateToggle = (activateOptimise) => {
-                toggleOptimise.classList.toggle('active', activateOptimise);
-                toggleNexus.classList.toggle('active', !activateOptimise);
-                optimiseCard.classList.toggle('active', activateOptimise);
-                nexusCard.classList.toggle('active', !activateOptimise);
-                optimiseCard.style.opacity = activateOptimise ? 1 : 0.6;
-                nexusCard.style.opacity = !activateOptimise ? 1 : 0.6;
-            };
-            
-            updateToggle(true);
-            
-            toggleOptimise.addEventListener('click', () => updateToggle(true));
-            toggleNexus.addEventListener('click', () => updateToggle(false));
-        }
-        
-        // --- FAQ TOGGLE LOGIC (Kept as is - controls the expand/collapse animation) ---
+        // --- FAQ TOGGLE LOGIC (Retained) ---
         function toggleFaq(header) {
             const content = header.nextElementSibling;
             
@@ -1195,7 +1698,7 @@
             content.classList.toggle('active');
         }
         
-        // --- SMOOTH SCROLL (Kept as is) ---
+        // --- SMOOTH SCROLL (Retained) ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
