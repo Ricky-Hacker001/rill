@@ -57,6 +57,13 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
+        /* 🔑 NAV LINKS CENTERING */
+        .nav-links-container {
+            display: flex;
+            justify-content: center; 
+            flex-grow: 1; 
+        }
+
         /* 📱 MOBILE MENU STYLES 📱 */
         #mobile-menu {
             position: fixed;
@@ -88,7 +95,7 @@
         }
         .mobile-nav-link:hover {
             color: var(--primary-orange-light);
-            transform: translateX(10px);
+            /* Removed transform: translateX(10px); to match request */
         }
         .mobile-nav-link.cta-mobile {
             color: var(--dark-background);
@@ -100,8 +107,8 @@
         .spin-icon { animation: spin-icon 10s linear infinite; }
 
         /* General Lift Effect */
-        .hover-lift { transition: transform 0.3s ease; }
-        .hover-lift:hover { transform: translateY(-5px); }
+        /* .hover-lift { transition: transform 0.3s ease; } */
+        /* .hover-lift:hover { transform: translateY(-5px); } <-- REMOVED FROM STYLES AND HTML */
         
         /* --- MASSIVE TEXT STYLES (New Section) --- */
         #massive-text-section {
@@ -422,14 +429,19 @@
                     </a>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="htw.html" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">How It Works</a>
-                    <a href="index.html#metrics" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">Results</a>
-                    <a href="./public/index.php" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">Case Study</a>
-                    <a href="index.html#pricing" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">Packages</a>
-                    <a href="index.html#about-us" class="text-gray-300 hover:text-orange-400 transition-colors duration-300 hover-lift">About</a>
-                    <a href="#footer" class="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-orange-600 to-orange-800 rounded-lg button-3d transition duration-300 hover-lift">
-                        SCHEDULE A CALL
+                <div class="hidden md:flex nav-links-container">
+                    <div class="flex items-center space-x-6">
+                        <a href="htw.html" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">How It Works</a>
+                        <a href="index.html#metrics" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">Results</a>
+                        <a href="./public/index.php" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">Case Study</a>
+                        <a href="index.html#pricing" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">Packages</a>
+                        <a href="./about.html" class="text-gray-300 hover:text-orange-400 transition-colors duration-300">About</a>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center ml-6">
+                    <a href="#footer" class="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-orange-600 to-orange-800 rounded-lg button-3d transition duration-300">
+                        BOOK A CALL
                     </a>
                 </div>
 
@@ -454,7 +466,7 @@
             <a href="index.html#pricing" class="mobile-nav-link">Packages</a>
             <a href="index.html#about-us" class="mobile-nav-link">About</a>
             <a href="#footer" class="mobile-nav-link cta-mobile pt-8 text-xl font-bold bg-gradient-to-r from-orange-500 to-orange-700 text-black rounded-lg text-center p-4 shadow-lg">
-                SCHEDULE A CALL
+                BOOK A CALL
             </a>
         </nav>
     </div>
@@ -516,13 +528,9 @@
                             style="transition-delay: 0.5s;">
                             <i class="fas fa-microphone-alt"></i>
                         </div>
-                        <h2 class="text-5xl font-extrabold text-white mb-4" style="transition-delay: 0.6s;">1. The Core
+                        <h2 class="text-5xl font-extrabold text-white mb-4" style="transition-delay: 0.6s;">The Core
                             Conversation</h2>
-                        <p class="text-xl text-gray-300 font-medium" style="transition-delay: 0.7s;">
-                            This is the source of all your new content assets. We ensure the recording is optimized for
-                            sound and maximum repurposing.
-                        </p>
-                    </div>
+                        </div>
                 </div>
             </div>
 
@@ -535,13 +543,9 @@
                             style="transition-delay: 0.5s;">
                             <i class="fas fa-bezier-curve"></i>
                         </div>
-                        <h2 class="text-5xl font-extrabold text-white mb-4" style="transition-delay: 0.6s;">2. Repurposing
+                        <h2 class="text-5xl font-extrabold text-white mb-4" style="transition-delay: 0.6s;">Repurposing
                             & Atomization</h2>
-                        <p class="text-xl text-gray-300 font-medium" style="transition-delay: 0.7s;">
-                            We extract the most viral, valuable, and quotable moments. This turns minutes of discussion
-                            into a deep, multi-format asset library.
-                        </p>
-                    </div>
+                        </div>
 
                     <div class="md:col-span-6 md:col-start-7 md:pl-16 order-2 md:order-2">
                         <div class="step-card p-10 rounded-2xl"
@@ -607,13 +611,9 @@
                             style="transition-delay: 0.5s;">
                             <i class="fas fa-rocket"></i>
                         </div>
-                        <h2 class="text-5xl font-extrabold text-white mb-4" style="transition-delay: 0.6s;">3. Strategic
+                        <h2 class="text-5xl font-extrabold text-white mb-4" style="transition-delay: 0.6s;">Strategic
                             Distribution</h2>
-                        <p class="text-xl text-gray-300 font-medium" style="transition-delay: 0.7s;">
-                            Content is worthless without reach. We handle the paid and organic deployment to attract
-                            high-value leads and solidify your authority.
-                        </p>
-                    </div>
+                        </div>
                 </div>
             </div>
 
@@ -634,9 +634,10 @@
             RILLIX
         </div>
     </section>
-    <footer id="footer" class="py-6 bg-black border-t border-gray-900 z-10 relative">
+
+    <footer id="footer" class="py-6 bg-black border-t border-gray-900 z-20 relative">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex flex-col sm:flex-row items-center justify-between text-sm">
+            <div class="flex items-center justify-between text-sm">
                 
                 <div class="flex items-center space-x-4 mb-4 sm:mb-0">
                     <div class="logo-text text-xl font-bold text-white">
@@ -648,7 +649,7 @@
                 </div>
 
                 <div class="flex space-x-6 text-sm mb-4 sm:mb-0">
-                    <a href="index.html#about-us" class="text-gray-300 hover:text-orange-500 transition-colors">About</a>
+                    <a href="./about.html" class="text-gray-300 hover:text-orange-500 transition-colors">About</a>
                     <a href="#" class="text-gray-300 hover:text-orange-500 transition-colors">Legal Docs</a>
                     <a href="#footer" class="text-gray-300 hover:text-orange-500 transition-colors">Join our team</a>
                 </div>
